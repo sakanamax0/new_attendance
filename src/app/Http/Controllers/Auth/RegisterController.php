@@ -17,13 +17,13 @@ class RegisterController extends Controller
     public function register(RegisterRequest $request)
     {
         // ユーザーを作成
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // ログイン後、打刻画面にリダイレクト
-        return redirect('/attendance'); // 打刻画面のパスに変更してください
+        // 会員登録後にログイン画面にリダイレクト
+        return redirect()->route('login')->with('status', '登録が完了しました。ログインしてください。');
     }
 }

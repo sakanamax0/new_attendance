@@ -4,59 +4,79 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\AttendanceStatus;
+use Carbon\CarbonImmutable;
 
 class Attendance extends Model
 {
     use HasFactory;
 
-    public static function getCurrentStatus($userId)
+    protected $fillable = [
+        'user_id',
+        'status',
+        'clock_in',
+        'clock_out',
+        'remarks',
+        'is_locked',
+    ];
+
+    protected $casts = [
+        'clock_in' => 'datetime',
+        'clock_out' => 'datetime',
+        'status' => AttendanceStatus::class, // Enumを適用
+    ];
+
+    /**
+     * 勤怠ステータスに応じたラベルを返す
+     *
+     * @return string
+     */
+    public function getStatusLabel(): string
     {
-        // 最新の勤怠ステータスを取得
-        return self::where('user_id', $userId)->latest()->first()->status ?? '勤務外';
+        return $this->status->label(); // AttendanceStatusのlabel()を呼び出し
     }
 
-    public static function startWork($userId)
+    /**
+     * 勤務時間計算（休憩時間を考慮）
+     */
+    public function calculateTotalHours(): void
     {
-        // 出勤処理（ステータスを勤務中に更新）
-        return self::create([
-            'user_id' => $userId,
-            'status' => '勤務中',
-            'start_time' => now(),
-        ]);
+        // 勤務時間計算のロジックは breaktime モデルに移動
     }
 
-    public static function startBreak($userId)
+    /**
+     * 勤怠のステータスをリセット
+     */
+    public function resetForNextDay()
     {
-        // 休憩開始処理
-        return self::create([
-            'user_id' => $userId,
-            'status' => '休憩中',
-            'break_start_time' => now(),
-        ]);
+        // ステータスを "勤務外" にリセット
+        $this->status = AttendanceStatus::OFF_DUTY;
+        $this->save();
     }
 
-    public static function resumeWork($userId)
-    {
-        // 勤務再開処理
-        return self::create([
-            'user_id' => $userId,
-            'status' => '勤務中',
-        ]);
-    }
-
-    public static function endWork($userId)
-    {
-        // 退勤処理
-        return self::create([
-            'user_id' => $userId,
-            'status' => '退勤済',
-            'end_time' => now(),
-        ]);
-    }
-
+    /**
+     * ユーザー情報とのリレーション
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * breaktime モデルとのリレーション
+     * 勤怠に関連する休憩時間のデータを取得
+     */
+    public function breaktimes()
+    {
+        return $this->hasMany(Breaktime::class);
+    }
+
+    /**
+     * attendance_details モデルとのリレーション
+     * 勤怠の修正申請データを取得
+     */
+    public function details()
+    {
+        return $this->hasMany(AttendanceDetail::class);
+    }
 }
