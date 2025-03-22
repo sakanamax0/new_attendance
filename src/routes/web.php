@@ -7,6 +7,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceDetailController;  
 use App\Http\Controllers\BreaktimeController;  
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController; // エイリアスを設定
+use App\Http\Controllers\Admin\ShowController;
+use App\Http\Controllers\StampCorrectionRequestController;
 
 // ユーザー登録
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -34,12 +36,23 @@ Route::middleware('auth')->prefix('attendance')->group(function () {
     // 勤怠詳細
     Route::get('/{id}/detail', [AttendanceDetailController::class, 'detail'])->name('attendance.detail');
 
-    // 勤怠編集・更新をAttendanceDetailControllerに移動
-    Route::get('/{id}/edit', [AttendanceDetailController::class, 'edit'])->name('attendance.edit');
+    // 勤怠更新
     Route::put('/{id}/update', [AttendanceDetailController::class, 'update'])->name('attendance.update');
+
+    // 申請一覧（修正申請）
+    Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index'])->name('attendance.stamp_correction_request.list');
 });
+
+
 
 // 管理者用の勤怠一覧
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index'])->name('admin.attendance.list');
+});
+
+// 管理者用勤怠詳細、承認・却下
+Route::prefix('admin/attendance')->name('admin.attendance.')->group(function () {
+    Route::get('{id}/show', [ShowController::class, 'show'])->name('show');
+    Route::patch('{id}/approve', [ShowController::class, 'approve'])->name('approve');
+    Route::patch('{id}/reject', [ShowController::class, 'reject'])->name('reject');
 });

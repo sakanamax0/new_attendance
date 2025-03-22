@@ -9,7 +9,7 @@ class Breaktime extends Model
 {
     use HasFactory;
 
-    protected $table = 'breaktime';
+    protected $table = 'breaktimes';
 
     protected $fillable = [
         'attendance_id',
@@ -17,9 +17,22 @@ class Breaktime extends Model
         'break_end_time',
     ];
 
+    protected $casts = [
+        'break_start_time' => 'datetime',  // これを追加
+        'break_end_time' => 'datetime',    // これを追加
+    ];
+
     // Attendance モデルとのリレーション
     public function attendance()
     {
         return $this->belongsTo(Attendance::class, 'attendance_id');
     }
+
+    // Breaktime.php
+
+    public function attendanceDetail()
+    {
+        return $this->belongsTo(AttendanceDetail::class, 'attendance_id');
+    }
+
 }

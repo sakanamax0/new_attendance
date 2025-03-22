@@ -14,7 +14,7 @@
                 <ul>
                     <li><a href="{{ route('attendance.index') }}">勤怠</a></li>
                     <li><a href="{{ route('attendance.list') }}">勤怠一覧</a></li>
-                    <li><a href="#">申請</a></li>
+                    <li><a href="{{ route('attendance.stamp_correction_request.list') }}">申請</a></li>
                     <li>
                         <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                             @csrf
@@ -29,7 +29,13 @@
     <main>
         <div class="container">
             <!-- 勤怠ステータス表示 -->
-            <span class="status-label">{{ $attendance->getStatusLabel() }}</span>
+            <span class="status-label">
+                @if($attendance)
+                    {{ $attendance->getStatusLabel() }}
+                @else
+                    勤務外
+                @endif
+            </span>
 
             <p class="date">
                 {{ \Carbon\Carbon::now()->locale('ja_JP')->isoFormat('YYYY年M月D日(ddd)') }}

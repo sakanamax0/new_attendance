@@ -14,7 +14,7 @@
             <ul>
                 <li><a href="{{ route('attendance.index') }}">勤怠</a></li>
                 <li><a href="{{ route('attendance.list') }}">勤怠一覧</a></li>
-                <li><a href="#">申請</a></li>
+                <li><a href="{{ route('attendance.stamp_correction_request.list') }}">申請</a></li>
                 <li>
                     <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                         @csrf
@@ -30,63 +30,74 @@
     <div class="container">
         <h2 class="title">勤怠詳細</h2>
 
-        <form action="{{ url('attendance/'.$attendance->id.'/update') }}" method="POST">
+        {{-- ✅ バリデーションエラーの表示 --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <p>入力内容に誤りがあります。以下を修正してください。</p>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>⚠️ {{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
+        {{-- ✅ 勤怠詳細情報の表示 --}}
+        <table class="attendance-table">
+            <tr>
+                <th>名前</th>
+                <td>{{ $attendance->user->name ?? '-' }}</td>
+            </tr>
+            <tr>
+                <th>日付</th>
+                <td>{{ $attendance->clock_in ? $attendance->clock_in->format('Y年 m月d日') : '-' }}</td>
+            </tr>
+        </table>
+
+        {{-- ✅ 休憩時間の表示 --}}
+        <form action="{{ route('attendance.update', $attendance->id) }}" method="POST">
             @csrf
             @method('PUT')
 
-            <table class="attendance-table">
-                <tr>
-                    <th>名前</th>
-                    <td>{{ $attendance->user->name ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <th>日付</th>
-                    <td>{{ $attendance->clock_in ? $attendance->clock_in->format('Y年 m月d日') : '-' }}</td>
-                </tr>
-                <tr>
-                    <th>出勤時間</th>
-                    <td><input type="time" name="clock_in" value="{{ $attendance->clock_in ? $attendance->clock_in->format('H:i') : '' }}"></td>
-                </tr>
-                <tr>
-                    <th>退勤時間</th>
-                    <td><input type="time" name="clock_out" value="{{ $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}"></td>
-                </tr>
-                <tr>
-                    <th>休憩開始</th>
-                    <td><input type="time" name="break_start_time" value="{{ $attendance->break_start_time ? $attendance->break_start_time->format('H:i') : '' }}"></td>
-                </tr>
-                <tr>
-                    <th>休憩終了</th>
-                    <td><input type="time" name="break_end_time" value="{{ $attendance->break_end_time ? $attendance->break_end_time->format('H:i') : '' }}"></td>
-                </tr>
-                <tr>
-                    <th>備考</th>
-                    <td><textarea name="remarks">{{ $attendance->remarks ?? '' }}</textarea></td>
-                </tr>
-            </table>
+            <label>出勤時間:</label>
+            <input type="time" name="request_clock_in" 
+                   value="{{ old('request_clock_in', optional($attendance->clock_in)->format('H:i')) }}"
+                   @if ($detail && $detail->remarks == 0) disabled @endif>
 
-            {{-- 修正ボタン（管理者以外 & 修正可能な場合のみ） --}}
-            @if ($attendance->is_locked == 1)
-              <p class="text-danger">※承認待ちのため修正はできません。</p>
-            @else
-              <button type="submit" class="btn btn-primary">修正を申請</button>
+            <label>退勤時間:</label>
+            <input type="time" name="request_clock_out" 
+                   value="{{ old('request_clock_out', optional($attendance->clock_out)->format('H:i')) }}"
+                   @if ($detail && $detail->remarks == 0) disabled @endif>
+
+            {{-- 休憩時間入力 --}}
+            @foreach ($breaktimes as $breaktime)
+                <div>
+                    <label>休憩開始:</label>
+                    <input type="time" name="break_start_time[]"
+                           value="{{ old('break_start_time[]', optional($breaktime->break_start_time)->format('H:i')) }}"
+                           @if ($detail && $detail->remarks == 0) disabled @endif>
+
+                    <label>休憩終了:</label>
+                    <input type="time" name="break_end_time[]"
+                           value="{{ old('break_end_time[]', optional($breaktime->break_end_time)->format('H:i')) }}"
+                           @if ($detail && $detail->remarks == 0) disabled @endif>
+                </div>
+            @endforeach
+
+            <label>申請理由:</label>
+            <textarea name="request_reason" @if ($detail && $detail->remarks == 0) disabled @endif>
+                {{ old('request_reason', $attendance->request_reason ?? '') }}
+            </textarea>
+
+            {{-- 承認待ちでなければ「修正を申請」ボタンを表示 --}}
+            @if (!$detail || $detail->remarks != 0)
+                <button type="submit" class="btn btn-primary">修正を申請</button>
+            @endif
+            
+            @if ($detail->remarks == 0)
+                <p class="text-danger">＊現在承認待ちのため修正できません。</p>
             @endif
         </form>
-
-        {{-- ✅ 管理者用の承認ボタン（承認待ちの時のみ表示） --}}
-        @if (Auth::user()->is_admin)
-            @if ($attendance->is_locked)
-                <form action="{{ route('admin.attendance.approve', $attendance->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit" class="btn btn-success">修正リクエストを承認</button>
-                </form>
-            @else
-                <p>✅ 修正リクエスト承認済み</p>
-            @endif
-        @endif
-
     </div>
   </main>
 

@@ -17,6 +17,8 @@ class AttendanceDetail extends Model
         'request_break_end_time',
         'request_reason',
         'request_status',
+        'remarks', // 追加
+        'is_locked',
     ];
 
     protected $casts = [
@@ -32,6 +34,11 @@ class AttendanceDetail extends Model
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
+    }
+
+    public function breaktimes()
+    {
+        return $this->hasMany(Breaktime::class, 'attendance_id');
     }
 }
 
