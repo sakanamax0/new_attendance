@@ -21,7 +21,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->intended(route('attendance.index')); // 勤怠画面へ
+            return redirect()->intended(route('user.attendance.index')); 
         }
 
         return back()->withErrors([

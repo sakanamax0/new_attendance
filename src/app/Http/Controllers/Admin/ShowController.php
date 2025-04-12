@@ -39,7 +39,7 @@ class ShowController extends Controller
             'reason' => $request->reason,
         ]);
 
-        // ✅ 一度全ての休憩時間を削除してから再登録
+       
         $attendance->breaktimes()->delete();
 
         if ($request->has('break_start_time')) {
@@ -53,7 +53,7 @@ class ShowController extends Controller
 
         session()->flash('success', '勤怠情報が更新されました。');
 
-        // ✅ breaktimes も取得してビューに渡す
+        
         $breaktimes = $attendance->breaktimes;
 
         return view('admin.attendance.show', compact('attendance', 'breaktimes'));

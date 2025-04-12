@@ -1,4 +1,4 @@
-/* 基本のスタイル */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -71,7 +71,7 @@ nav ul li a {
     border: 1px solid #007bff;
 }
 
-/* タブのコンテンツ */
+
 .tab-content {
     margin-top: 20px;
 }
@@ -84,7 +84,7 @@ nav ul li a {
     display: block;
 }
 
-/* テーブル */
+
 .attendance-table {
     width: 100%;
     border-collapse: collapse;

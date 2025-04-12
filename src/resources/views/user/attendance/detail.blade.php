@@ -30,7 +30,7 @@
     <div class="container">
         <h2 class="title">勤怠詳細</h2>
 
-        {{-- ✅ バリデーションエラーの表示 --}}
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <p>入力内容に誤りがあります。以下を修正してください。</p>
@@ -42,7 +42,7 @@
             </div>
         @endif
 
-        {{-- ✅ 勤怠詳細情報の表示 --}}
+  
         <table class="attendance-table">
             <tr>
                 <th>名前</th>
@@ -54,7 +54,7 @@
             </tr>
         </table>
 
-        {{-- ✅ 休憩時間の表示 --}}
+
         <form action="{{ route('attendance.update', $attendance->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -69,7 +69,7 @@
                    value="{{ old('request_clock_out', optional($attendance->clock_out)->format('H:i')) }}"
                    @if ($detail && $detail->remarks == 0) disabled @endif>
 
-            {{-- 休憩時間入力 --}}
+          
             @foreach ($breaktimes as $breaktime)
                 <div>
                     <label>休憩開始:</label>
@@ -89,7 +89,7 @@
                 {{ old('request_reason', $attendance->request_reason ?? '') }}
             </textarea>
 
-            {{-- 承認待ちでなければ「修正を申請」ボタンを表示 --}}
+           
             @if (!$detail || $detail->remarks != 0)
                 <button type="submit" class="btn btn-primary">修正を申請</button>
             @endif

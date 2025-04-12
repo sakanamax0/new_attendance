@@ -18,17 +18,17 @@ class Breaktime extends Model
     ];
 
     protected $casts = [
-        'break_start_time' => 'datetime',  // これを追加
-        'break_end_time' => 'datetime',    // これを追加
+        'break_start_time' => 'datetime',  
+        'break_end_time' => 'datetime',    
     ];
 
-    // Attendance モデルとのリレーション
+  
     public function attendance()
     {
         return $this->belongsTo(Attendance::class, 'attendance_id');
     }
 
-    // Breaktime.php
+
 
     public function attendanceDetail()
     {

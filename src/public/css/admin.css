@@ -1,4 +1,4 @@
-/* 全体のスタイル */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,7 +6,7 @@ body {
     background-color: #F7F7F7;
 }
 
-/* ヘッダー */
+
 header {
     display: flex;
     justify-content: space-between;
@@ -38,21 +38,21 @@ nav ul li a {
     font-size: 14px;
 }
 
-/* メインコンテンツ */
+
 main {
     width: 80%;
     margin: 40px auto;
     text-align: center;
 }
 
-/* 日付タイトル */
+
 h1 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
-/* 日付ナビゲーション */
+
 .date-navigation {
     display: flex;
     justify-content: center;
@@ -80,7 +80,7 @@ h1 {
     font-size: 16px;
 }
 
-/* テーブルスタイル */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -103,7 +103,7 @@ table tr:last-child td {
     border-bottom: none;
 }
 
-/* 詳細ボタン */
+
 .detail-button {
     display: inline-block;
     padding: 5px 10px;

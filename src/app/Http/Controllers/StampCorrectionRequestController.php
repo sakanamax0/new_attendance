@@ -12,12 +12,12 @@ class StampCorrectionRequestController extends Controller
         $this->middleware('auth');
     }
 
-    // 申請一覧（一般ユーザー）
+ 
     public function index()
     {
-        // 承認待ちと承認済みの申請を取得
-        $pendingRequests = AttendanceDetail::where('remarks', 0)->get(); // 承認待ち
-        $approvedRequests = AttendanceDetail::where('remarks', 1)->get(); // 承認済み
+      
+        $pendingRequests = AttendanceDetail::where('remarks', 0)->get(); 
+        $approvedRequests = AttendanceDetail::where('remarks', 1)->get(); 
 
         return view('user.stamp_correction_request.list', compact('pendingRequests', 'approvedRequests'));
     }

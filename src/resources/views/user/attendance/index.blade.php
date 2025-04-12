@@ -28,7 +28,7 @@
     
     <main>
         <div class="container">
-            <!-- 勤怠ステータス表示 -->
+        
             <span class="status-label">
                 @if($attendance)
                     {{ $attendance->getStatusLabel() }}
@@ -43,12 +43,12 @@
             <p class="time">{{ now()->format('H:i') }}</p>
 
             @if ($attendance)
-                @if ($attendance->status === \App\Enums\AttendanceStatus::OFF_DUTY)  <!-- 勤務外 -->
+                @if ($attendance->status === \App\Enums\AttendanceStatus::OFF_DUTY)  
                     <form action="{{ route('attendance.checkIn') }}" method="POST">
                         @csrf
                         <button type="submit" class="btn">出勤</button>
                     </form>
-                @elseif ($attendance->status === \App\Enums\AttendanceStatus::WORKING)  <!-- 勤務中 -->
+                @elseif ($attendance->status === \App\Enums\AttendanceStatus::WORKING)  
                     <form action="{{ route('attendance.breakStart', $attendance->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn">休憩開始</button>
@@ -57,21 +57,21 @@
                         @csrf
                         <button type="submit" class="btn">退勤</button>
                     </form>
-                @elseif ($attendance->status === \App\Enums\AttendanceStatus::BREAK)  <!-- 休憩中 -->
+                @elseif ($attendance->status === \App\Enums\AttendanceStatus::BREAK)  
                     <form action="{{ route('attendance.breakEnd', $attendance->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn">休憩終了</button>
                     </form>
                 @endif
             @else
-                <!-- 勤怠情報がない場合に勤務開始ボタンを表示 -->
+                
                 <form action="{{ route('attendance.checkIn') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn">出勤</button>
                 </form>
             @endif
 
-            <!-- メッセージ表示 -->
+           
             @if(isset($message) && $message)
                 <p class="message">{{ $message }}</p>
             @endif

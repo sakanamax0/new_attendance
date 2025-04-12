@@ -20,10 +20,10 @@ class AttendanceController extends Controller
         $user = auth()->user();
         $attendance = Attendance::where('user_id', $user->id)->latest()->first();
 
-        // 現在の日付を取得
+       
         $currentDate = Carbon::today();
 
-        // 勤怠情報が存在する場合、日付が変わっていればステータスをリセット
+       
         if ($attendance && $attendance->created_at->toDateString() !== $currentDate->toDateString()) {
             $this->resetForNextDay($attendance);
         }
@@ -78,7 +78,7 @@ class AttendanceController extends Controller
         return Attendance::where('user_id', Auth::id())->whereNull('clock_out')->latest()->first();
     }
 
-    // 勤怠履歴一覧
+   
     public function list(Request $request)
     {
         $month = $request->query('month', now()->format('Y-m'));
@@ -99,7 +99,7 @@ class AttendanceController extends Controller
         return view('user.attendance.list', compact('attendances', 'currentMonth', 'prevMonth', 'nextMonth'));
     }
 
-    // 勤怠詳細ページに遷移
+    
     public function showDetails($attendance_id)
     {
         return redirect()->route('user.attendance.details', $attendance_id);

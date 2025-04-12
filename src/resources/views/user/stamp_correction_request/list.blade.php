@@ -30,7 +30,7 @@
     <div class="container">
       <h2 class="title">申請一覧</h2>
 
-      <!-- タブ切替 -->
+    
       <div class="tabs">
         <ul>
           <li class="tab active" data-tab="pending">承認待ち</li>
@@ -39,7 +39,7 @@
       </div>
 
       <div class="tab-content">
-        <!-- 承認待ちタブのコンテンツ -->
+       
         <div class="tab-pane active" id="pending">
           <table class="attendance-table">
             <thead>
@@ -67,7 +67,7 @@
           </table>
         </div>
 
-        <!-- 承認済みタブのコンテンツ -->
+       
         <div class="tab-pane" id="approved">
           <table class="attendance-table">
             <thead>
@@ -99,7 +99,7 @@
   </main>
 
   <script>
-    // タブの切り替え処理
+    
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', function() {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
