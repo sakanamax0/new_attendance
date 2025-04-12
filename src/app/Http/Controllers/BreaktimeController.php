@@ -33,7 +33,7 @@ class BreaktimeController extends Controller
             'break_start_time' => now(),
         ]);
 
-        return redirect()->route('attendance.index')->with('success', '休憩を開始しました。');
+        return redirect()->route('user.attendance.index')->with('success', '休憩を開始しました。');
     }
 
   
@@ -53,6 +53,6 @@ class BreaktimeController extends Controller
         $lastBreaktime = $attendance->breaktimes()->latest()->first();
         $lastBreaktime->update(['break_end_time' => now()]);
 
-        return redirect()->route('attendance.index')->with('success', '休憩を終了しました。');
+        return redirect()->route('user.attendance.index')->with('success', '休憩を終了しました。');
     }
 }

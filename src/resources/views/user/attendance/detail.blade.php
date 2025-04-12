@@ -12,7 +12,7 @@
         <h1 class="logo">COACHTECH</h1>
         <nav>
             <ul>
-                <li><a href="{{ route('attendance.index') }}">勤怠</a></li>
+                <li><a href="{{ route('user.attendance.index') }}">勤怠</a></li>
                 <li><a href="{{ route('attendance.list') }}">勤怠一覧</a></li>
                 <li><a href="{{ route('attendance.stamp_correction_request.list') }}">申請</a></li>
                 <li>
@@ -90,13 +90,13 @@
             </textarea>
 
            
-            @if (!$detail || $detail->remarks != 0)
-                <button type="submit" class="btn btn-primary">修正を申請</button>
-            @endif
-            
-            @if ($detail->remarks == 0)
-                <p class="text-danger">＊現在承認待ちのため修正できません。</p>
-            @endif
+            <!-- user/attendance/detail.blade.php -->
+@if ($detail && $detail->remarks == 0)
+    <!-- remarks が 0 の場合の処理 -->
+@else
+    <p>remarks が 0 ではありません</p>
+@endif
+
         </form>
     </div>
   </main>

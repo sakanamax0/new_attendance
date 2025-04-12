@@ -1,49 +1,59 @@
 <?php
 
-namespace App\Http\Controllers\Admin;  
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminLoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class AdminLoginController extends Controller
 {
     
     public function showLoginForm()
     {
-        
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.attendance.admin_list');
         }
 
-        
+       
         if (Auth::guard('web')->check()) {
             Auth::guard('web')->logout();
-            session()->invalidate(); 
+            session()->invalidate();
             session()->regenerateToken();
-            return redirect()->route('login'); 
+            return redirect()->route('login');
         }
 
-        return view('auth.admin.login'); 
+        return view('auth.admin.login');
     }
 
-   
+    
     public function login(AdminLoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
 
-       
+        
         if (Auth::guard('web')->check()) {
             Auth::guard('web')->logout();
-            session()->invalidate(); 
+            session()->invalidate();
             session()->regenerateToken();
         }
 
-
+       
         if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->route('admin.attendance.admin_list'); 
+            return redirect()->route('admin.attendance.admin_list');
         }
 
         return back()->withErrors(['login' => 'ログイン情報が登録されていません。']);
+    }
+
+    
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout();  
+        $request->session()->invalidate();  
+        $request->session()->regenerateToken();  
+
+        return redirect()->route('admin.login');  
     }
 }
