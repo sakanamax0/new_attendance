@@ -31,11 +31,9 @@ class AttendanceController extends Controller
         $status = $attendance ? $attendance->getStatusLabel() : '勤務外';
         $message = ($attendance && $attendance->status === AttendanceStatus::FINISHED) ? 'お疲れ様でした。' : '';
 
-        return view('attendance.index', compact('status', 'message', 'attendance'));
+        return view('user.attendance.index', compact('status', 'message', 'attendance'));
     }
 
-    // 勤怠更新処理（削除）
-    // ※出勤・退勤はAttendanceDetailControllerで扱うため、更新処理は削除
 
     public function checkIn()
     {
@@ -98,12 +96,12 @@ class AttendanceController extends Controller
             ->orderBy('clock_in', 'asc')
             ->get();
 
-        return view('attendance.list', compact('attendances', 'currentMonth', 'prevMonth', 'nextMonth'));
+        return view('user.attendance.list', compact('attendances', 'currentMonth', 'prevMonth', 'nextMonth'));
     }
 
     // 勤怠詳細ページに遷移
     public function showDetails($attendance_id)
     {
-        return redirect()->route('attendance.details', $attendance_id);
+        return redirect()->route('user.attendance.details', $attendance_id);
     }
 }

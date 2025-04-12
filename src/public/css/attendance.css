@@ -95,3 +95,9 @@ nav ul li a {
     color: white;
     border: none;
 }
+
+.no-records {
+    color: red;
+    margin-left: 1rem;
+    font-weight: bold;
+}

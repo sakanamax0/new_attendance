@@ -25,7 +25,7 @@ class AttendanceDetailController extends Controller
         // 休憩時間のデータを取得
         $breaktimes = $attendance->breaktimes;
 
-        return view('attendance.detail', compact('attendance', 'detail', 'breaktimes'));
+        return view('user.attendance.detail', compact('attendance', 'detail', 'breaktimes'));
     }
 
 

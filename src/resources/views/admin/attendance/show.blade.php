@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>勤怠詳細</title>
-    <link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/show.css') }}">
 </head>
 <body>
     <header>
@@ -12,13 +12,13 @@
             <h1 class="logo">COACHTECH</h1>
             <nav>
                 <ul>
-                    <li><a href="{{ route('admin.attendance.list') }}">勤怠一覧</a></li>
-                    <li><a href="#">スタッフ一覧</a></li>
-                    <li><a href="#">申請一覧</a></li>
+                    <li><a href="{{ route('admin.attendance.admin_list') }}">勤怠一覧</a></li>
+                    <li><a href="{{ route('admin.staff.list') }}">スタッフ一覧</a></li>
+                    <li><a href="{{ route('admin.stamp_correction_request.list') }}">申請一覧</a></li>
                     <li>
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit" class="logout-btn">ログアウト</button>
+                            <button type="submit" class="btn btn-link">ログアウト</button>
                         </form>
                     </li>
                 </ul>
@@ -28,104 +28,89 @@
 
     <main>
         <div class="container">
-            <h2>勤怠詳細</h2>
+            <h2 class="title">勤怠詳細</h2>
 
-            <!-- 勤怠詳細の表示 -->
-            <table class="attendance-table">
-                <tr>
-                    <th>名前</th>
-                    <td>{{ $attendance->user->name }}</td>
-                </tr>
-                <tr>
-                    <th>日付</th>
-                    <td>{{ $attendance->clock_in ? $attendance->clock_in->format('Y年m月d日') : '' }}</td>
-                </tr>
-                <tr>
-                    <th>出勤・退勤</th>
-                    <td>
-                        {{ $attendance->clock_in ? $attendance->clock_in->format('H:i') : '未設定' }} ～ 
-                        {{ $attendance->clock_out ? $attendance->clock_out->format('H:i') : '未設定' }}
-                    </td>
-                </tr>
-                <tr>
-                    <th>休憩</th>
-                    <td>
-                        {{ optional($attendance->break_start_time)->format('H:i') ?: '未設定' }} ～ 
-                        {{ optional($attendance->break_end_time)->format('H:i') ?: '未設定' }}
-                    </td>
-                </tr>
-                <tr>
-                    <th>備考</th>
-                    <td>{{ $attendance->remarks ?? 'なし' }}</td>
-                </tr>
-            </table>
-
-            <!-- 修正ボタン（編集ページへ遷移） -->
-            <form action="{{ route('admin.attendance.detail', $attendance->id) }}" method="GET"> 
-                <button type="submit" class="btn">修正</button>
-            </form>
-
-            <hr>
-
-            <h3>申請一覧</h3>
-
-            @if ($attendance->details->isEmpty())
-                <p>現在、修正申請はありません。</p>
-            @else
-                <table class="request-table">
-                    <thead>
-                        <tr>
-                            <th>申請ID</th>
-                            <th>出勤</th>
-                            <th>退勤</th>
-                            <th>休憩</th>
-                            <th>備考</th>
-                            <th>ステータス</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($attendance->details as $detail)
-                            <tr>
-                                <td>{{ $detail->id }}</td>
-                                <td>{{ $detail->request_clock_in->format('H:i') }}</td>
-                                <td>{{ $detail->request_clock_out->format('H:i') }}</td>
-                                <td>
-                                    {{ optional($detail->request_break_start_time)->format('H:i') ?: '未設定' }} ～ 
-                                    {{ optional($detail->request_break_end_time)->format('H:i') ?: '未設定' }}
-                                </td>
-                                <td>{{ $detail->request_reason }}</td>
-                                <td>
-                                    @if ($detail->request_status == 'pending')
-                                        <span class="status-pending">承認待ち</span>
-                                    @elseif ($detail->request_status == 'approved')
-                                        <span class="status-approved">承認済み</span>
-                                    @else
-                                        <span class="status-rejected">却下</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($detail->request_status == 'pending')
-                                        <form action="{{ route('admin.attendance.approve', $detail->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-approve">承認</button>
-                                        </form>
-
-                                        <form action="{{ route('admin.attendance.reject', $detail->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('PATCH')
-                                            <input type="text" name="reject_reason" placeholder="却下理由" required>
-                                            <button type="submit" class="btn btn-reject">却下</button>
-                                        </form>
-                                    @endif
-                                </td>
-                            </tr>
+            
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <p>入力内容に誤りがあります。以下を修正してください。</p>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>⚠️ {{ $error }}</li>
                         @endforeach
-                    </tbody>
-                </table>
+                    </ul>
+                </div>
             @endif
 
+            
+            @if(session('success'))
+                <div style="color: green; padding: 10px; border: 1px solid green;">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            
+            <div class="attendance-details">
+                <div>
+                    <table class="attendance-table">
+                        <tr>
+                            <th>名前</th>
+                            <td>{{ $attendance->user->name ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>日付</th>
+                            <td>{{ $attendance->clock_in ? $attendance->clock_in->format('Y年 m月d日') : '-' }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div>
+                    <form action="{{ route('admin.attendance.update', $attendance->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+
+                        <table class="attendance-table">
+                            <tr>
+                                <th>出勤・退勤</th>
+                                <td>
+                                    <input type="time" name="request_clock_in" 
+                                           value="{{ old('request_clock_in', optional($attendance->clock_in)->format('H:i')) }}" />
+                                    ～ 
+                                    <input type="time" name="request_clock_out" 
+                                           value="{{ old('request_clock_out', optional($attendance->clock_out)->format('H:i')) }}" />
+                                </td>
+                            </tr>
+
+                            
+                            @foreach ($breaktimes as $index => $breaktime)
+                                <tr>
+                                    <th>休憩{{ $index + 1 }}</th>
+                                    <td>
+                                        <input type="time" name="break_start_time[]" 
+                                               value="{{ old('break_start_time[]', optional($breaktime->break_start_time)->format('H:i')) }}" />
+                                        ～ 
+                                        <input type="time" name="break_end_time[]" 
+                                               value="{{ old('break_end_time[]', optional($breaktime->break_end_time)->format('H:i')) }}" />
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                           
+                            <tr>
+                                <th>備考</th>
+                                <td>
+                                    <textarea id="reason" name="reason" rows="3">{{ old('reason', $attendance->reason) }}</textarea>
+                                </td>
+                            </tr>
+                        </table>
+
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">修正</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </main>
 </body>

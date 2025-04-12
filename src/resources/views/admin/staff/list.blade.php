@@ -12,15 +12,15 @@
             <h1 class="logo">COACHTECH</h1>
             <nav>
                 <ul>
-                    <li><a href="{{ route('admin.attendance.list') }}">勤怠一覧</a></li>
+                    <li><a href="{{ route('admin.attendance.admin_list') }}">勤怠一覧</a></li>
                     <li><a href="{{ route('admin.staff.list') }}">スタッフ一覧</a></li>
-                    <li><a href="#">申請一覧</a></li>
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" style="border: none; background: none; cursor: pointer; color: #007bff;">ログアウト</button>
-                        </form>
-                    </li>
+                    <li><a href="{{ route('admin.stamp_correction_request.list') }}">申請一覧</a></li>
+                <li>
+                    <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
+                    @csrf
+                        <button type="submit" class="btn btn-link">ログアウト</button>
+                    </form>
+                </li>
                 </ul>
             </nav>
         </div>
@@ -38,12 +38,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(count($staff) > 0)
-                        @foreach ($staff as $user)
+                    @if(count($staffs) > 0)
+                        @foreach ($staffs as $user)
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td><a href="{{ route('admin.attendance.list', ['user_id' => $user->id]) }}" class="btn">詳細</a></td>
+                                <td><a href="{{ route('admin.attendance.staff', $user->id) }}" class="btn">詳細</a></td>
+
                             </tr>
                         @endforeach
                     @else

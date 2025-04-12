@@ -12,10 +12,15 @@
             <h1 class="logo">COACHTECH</h1>
             <nav>
                 <ul>
-                    <li><a href="{{ route('admin.attendance.list') }}">勤怠一覧</a></li>
+                    <li><a href="{{ route('admin.attendance.admin_list') }}">勤怠一覧</a></li>
                     <li><a href="{{ route('admin.staff.list') }}">スタッフ一覧</a></li>
-                    <li><a href="#">申請一覧</a></li>
-                    <li><a href="{{ route('logout') }}">ログアウト</a></li>
+                    <li><a href="{{ route('admin.stamp_correction_request.list') }}">申請一覧</a></li>
+                    <li>
+                        <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-link">ログアウト</button>
+                        </form>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -23,11 +28,11 @@
 
     <main>
         <div class="container">
-            <h2>{{ $staff->name }}さんの勤怠</h2>
+            <h2>{{ $user->name }}さんの勤怠</h2>
 
             <!-- 月選択フォーム -->
-            <form action="{{ route('admin.attendance.staff', $staff->id) }}" method="GET">
-                <label for="month">月</label>
+            <form action="{{ route('admin.attendance.staff', $user->id) }}" method="GET">
+                <label for="month"></label>
                 <input type="month" name="month" value="{{ $month ?? now()->format('Y-m') }}">
                 <button type="submit">検索</button>
             </form>
@@ -41,6 +46,7 @@
                         <th>退勤</th>
                         <th>休憩</th>
                         <th>合計</th>
+                        <th>詳細</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,19 +55,21 @@
                             <td>{{ $attendance->clock_in ? $attendance->clock_in->format('Y-m-d') : '' }}</td>
                             <td>{{ $attendance->clock_in ? $attendance->clock_in->format('H:i') : '未設定' }}</td>
                             <td>{{ $attendance->clock_out ? $attendance->clock_out->format('H:i') : '未設定' }}</td>
+                            <td>{{ $attendance->total_break_time }}</td>
+                            <td>{{ $attendance->total_time }}</td>
                             <td>
-                                @if ($attendance->break_start_time && $attendance->break_end_time)
-                                    {{ $attendance->break_start_time->diffInMinutes($attendance->break_end_time) }} 分
-                                @else
-                                    未設定
-                                @endif
+                                <a href="{{ route('admin.attendance.show', $attendance->user_id) }}" class="btn btn-primary">詳細</a>
                             </td>
-                            <td>{{ $attendance->total_working_hours ?? '未計算' }} 時間</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </main>
+
+    <!-- CSV出力ボタン -->
+    <form action="{{ route('admin.attendance.export_csv') }}" method="GET">
+        <button type="submit">CSV出力</button>
+    </form>
 </body>
 </html>

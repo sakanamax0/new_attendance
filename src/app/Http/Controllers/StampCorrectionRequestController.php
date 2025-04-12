@@ -19,6 +19,6 @@ class StampCorrectionRequestController extends Controller
         $pendingRequests = AttendanceDetail::where('remarks', 0)->get(); // 承認待ち
         $approvedRequests = AttendanceDetail::where('remarks', 1)->get(); // 承認済み
 
-        return view('attendance.stamp_correction_request_list', compact('pendingRequests', 'approvedRequests'));
+        return view('user.stamp_correction_request.list', compact('pendingRequests', 'approvedRequests'));
     }
 }
