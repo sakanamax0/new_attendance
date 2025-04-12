@@ -23,6 +23,11 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
+Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm']);
+Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('admin.login');
+Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
+
 Route::middleware('auth')->prefix('attendance')->group(function () {
     Route::get('/', [AttendanceController::class, 'index'])->name('user.attendance.index');
     Route::post('/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
@@ -35,19 +40,11 @@ Route::middleware('auth')->prefix('attendance')->group(function () {
     Route::get('/{id}/detail', [AttendanceDetailController::class, 'detail'])->name('attendance.detail');
     Route::put('/{id}/update', [AttendanceDetailController::class, 'update'])->name('attendance.update');
 
-    
     Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index'])->name('attendance.stamp_correction_request.list');
 });
 
 
-Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm']);
-Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('admin.login');
-Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
-
-
 Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(function () {
-
-    
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('/list', [AdminAttendanceController::class, 'index'])->name('admin_list');
         Route::get('/staff/{user_id}', [AdminAttendanceController::class, 'staffAttendance'])->name('staff');
@@ -55,22 +52,17 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
         Route::patch('/staff/{user_id}/approve', [ShowController::class, 'approve'])->name('approve');
         Route::patch('/staff/{user_id}/reject', [ShowController::class, 'reject'])->name('reject');
         Route::patch('/staff/{user_id}/update', [ShowController::class, 'update'])->name('update');
-
-        
         Route::get('/export_csv', [AdminAttendanceController::class, 'exportCSV'])->name('export_csv');
     });
 
-   
+    
     Route::get('/staff/list', [StaffController::class, 'index'])->name('staff.list');
 
     
     Route::prefix('stamp_correction_request')->name('stamp_correction_request.')->group(function () {
-        Route::get('/list', [AdminStampCorrectionRequestController::class, 'index'])->name('list'); 
-        Route::get('/approve/{attendance_correct_request}', [AdminStampCorrectionRequestController::class, 'showApprovalForm'])->name('approve'); 
-        Route::post('/approve/{attendance_correct_request}', [AdminStampCorrectionRequestController::class, 'approve'])->name('approve.submit'); 
-
-        
+        Route::get('/list', [AdminStampCorrectionRequestController::class, 'index'])->name('list');
+        Route::get('/approve/{attendance_correct_request}', [AdminStampCorrectionRequestController::class, 'showApprovalForm'])->name('approve');
+        Route::post('/approve/{attendance_correct_request}', [AdminStampCorrectionRequestController::class, 'approve'])->name('approve.submit');
         Route::post('/resend/{id}', [AdminStampCorrectionRequestController::class, 'resendCorrectionRequest'])->name('resend');
     });
-
 });

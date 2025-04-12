@@ -50,21 +50,21 @@ class AttendanceController extends Controller
             'status' => AttendanceStatus::WORKING
         ]);
 
-        return redirect()->route('attendance.index')->with('success', '出勤しました。');
+        return redirect()->route('user.attendance.index')->with('success', '出勤しました。');
     }
 
     public function checkOut()
     {
         $attendance = $this->getCurrentAttendance();
         if (!$attendance) {
-            return redirect()->route('attendance.index')->with('error', '出勤記録が見つかりません。');
+            return redirect()->route('user.attendance.index')->with('error', '出勤記録が見つかりません。');
         }
 
         $attendance->update(['status' => AttendanceStatus::FINISHED, 'clock_out' => now()]);
         $attendance->calculateTotalHours();
         $this->resetForNextDay($attendance);
 
-        return redirect()->route('attendance.index')->with('success', '退勤しました。');
+        return redirect()->route('user.attendance.index')->with('success', '退勤しました。');
     }
 
     public function resetForNextDay(Attendance $attendance)

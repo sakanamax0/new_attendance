@@ -12,7 +12,7 @@
       <h1 class="logo">COACHTECH</h1>
       <nav>
         <ul>
-          <li><a href="{{ route('attendance.index') }}">勤怠</a></li>
+          <li><a href="{{ route('user.attendance.index') }}">勤怠</a></li>
           <li><a href="{{ route('attendance.list') }}">勤怠一覧</a></li>
           <li><a href="{{ route('attendance.stamp_correction_request.list') }}">申請</a></li>
           <li>
