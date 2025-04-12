@@ -1,100 +1,141 @@
-環境構築
+# 🕒 coachtech 勤怠管理アプリ
 
-1.リポジトリをクローン
+企業向けの勤怠打刻・修正申請・管理を行う Web アプリケーションです。
 
+---
+
+## 🚀 環境構築
+
+### 1. リポジトリをクローン
+
+```bash
 git clone git@github.com:sakanamax0/new_attendance.git
+cd new_attendance
+```
 
-2.Makefileを使ってコンテナを起動
-・初回起動時、以下のコマンドを実行して環境をセットアップします。
+### 2. Makefileを使ってコンテナを起動
 
+初回起動時は、以下のコマンドで環境をセットアップします：
+
+```bash
 make init
+```
 
-※これで、docker-compose を使用して必要なコンテナ（PHP, Nginx, MySQL, phpMyAdmin）が起動します。
+> `docker-compose` により PHP / Nginx / MySQL / phpMyAdmin コンテナが自動起動されます。
 
-3.依存パッケージのインストール
-・コンテナ内でLaravelの依存パッケージをインストールするため、次のコマンドを実行します。
+### 3. Laravel依存パッケージのインストール
 
+```bash
 make composer-install
+```
 
-4.マイグレーション実行
-・データベースの初期マイグレーションを行います。
+### 4. マイグレーションの実行
 
+```bash
 make migrate
+```
 
+---
 
-ダミーデータのログイン情報
-・管理者
+## 👤 ダミーデータのログイン情報
 
-メールアドレス: master@yahoo.co.jp
+### 管理者ログイン
 
-パスワード: master7
+- メールアドレス：`master@yahoo.co.jp`  
+- パスワード：`master7`
 
-・一般ユーザー
+### 一般ユーザーログイン
 
-メールアドレス: ika@yahoo.co.jp
+- メールアドレス：`ika@yahoo.co.jp`  
+- パスワード：`ikaikaaa`
 
-パスワード: ikaikaaa
+---
 
-テーブル仕様
+## 🗂 テーブル仕様
+
 以下はアプリケーションで使用するデータベーステーブルの構成です。
 
-🔹 users テーブル
-カラム名	型	PRIMARY KEY	UNIQUE KEY	NOT NULL	FOREIGN KEY
-id	BIGINT	○		○	
-name	STRING			○	
-email	STRING		○	○	
-password	STRING			○	
-created_at	TIMESTAMP				
-updated_at	TIMESTAMP				
-attendance_status	STRING				
+### 🔹 `users` テーブル
 
-🔹 admins テーブル
-カラム名	型	PRIMARY KEY	UNIQUE KEY	NOT NULL	FOREIGN KEY
-id	BIGINT	○		○	
-name	STRING			○	
-email	STRING		○	○	
-password	STRING			○	
-created_at	TIMESTAMP				
-updated_at	TIMESTAMP				
+カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
+-|-|-|-|-|-
+id | BIGINT | ○ |  | ○ |  
+name | STRING |  |  | ○ |  
+email | STRING |  | ○ | ○ |  
+password | STRING |  |  | ○ |  
+created_at | TIMESTAMP |  |  |  |  
+updated_at | TIMESTAMP |  |  |  |  
+attendance_status | STRING |  |  |  |  
 
-🔹 attendances テーブル
-カラム名	型	PRIMARY KEY	UNIQUE KEY	NOT NULL	FOREIGN KEY
-id	BIGINT	○		○	
-user_id	BIGINT			○	users(id)
-status	STRING			○	
-clock_in	DATETIME				
-clock_out	DATETIME				
-reason	TEXT				
-created_at	TIMESTAMP				
-updated_at	TIMESTAMP				
+---
 
-🔹 breaktimes テーブル
-カラム名	型	PRIMARY KEY	UNIQUE KEY	NOT NULL	FOREIGN KEY
-id	BIGINT	○		○	
-attendance_id	BIGINT			○	attendances(id)
-break_start_time	DATETIME				
-break_end_time	DATETIME				
-created_at	TIMESTAMP				
-updated_at	TIMESTAMP				
+### 🔹 `admins` テーブル
 
-🔹 attendance_details テーブル
-カラム名	型	PRIMARY KEY	UNIQUE KEY	NOT NULL	FOREIGN KEY
-id	BIGINT	○		○	
-attendance_id	BIGINT			○	attendances(id)
-updated_at	TIMESTAMP				
-remarks	TEXT				
-request_reason	TEXT				
-created_at	TIMESTAMP				
+カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
+-|-|-|-|-|-
+id | BIGINT | ○ |  | ○ |  
+name | STRING |  |  | ○ |  
+email | STRING |  | ○ | ○ |  
+password | STRING |  |  | ○ |  
+created_at | TIMESTAMP |  |  |  |  
+updated_at | TIMESTAMP |  |  |  |  
 
-🔹 migrations テーブル
-カラム名	型	PRIMARY KEY	UNIQUE KEY	NOT NULL	FOREIGN KEY
-id	BIGINT	○		○	
-migration	STRING			○	
-batch	INT			○	
+---
 
-ER図
-ER図は doc/ER_diagram.png に保存されています。下記リンクから確認できます。
+### 🔹 `attendances` テーブル
 
-[ER図](doc/ER_diagram.png)
+カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
+-|-|-|-|-|-
+id | BIGINT | ○ |  | ○ |  
+user_id | BIGINT |  |  | ○ | users(id)  
+status | STRING |  |  | ○ |  
+clock_in | DATETIME |  |  |  |  
+clock_out | DATETIME |  |  |  |  
+reason | TEXT |  |  |  |  
+created_at | TIMESTAMP |  |  |  |  
+updated_at | TIMESTAMP |  |  |  |  
 
-PHPUnitテスト
+---
+
+### 🔹 `breaktimes` テーブル
+
+カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
+-|-|-|-|-|-
+id | BIGINT | ○ |  | ○ |  
+attendance_id | BIGINT |  |  | ○ | attendances(id)  
+break_start_time | DATETIME |  |  |  |  
+break_end_time | DATETIME |  |  |  |  
+created_at | TIMESTAMP |  |  |  |  
+updated_at | TIMESTAMP |  |  |  |  
+
+---
+
+### 🔹 `attendance_details` テーブル
+
+カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
+-|-|-|-|-|-
+id | BIGINT | ○ |  | ○ |  
+attendance_id | BIGINT |  |  | ○ | attendances(id)  
+updated_at | TIMESTAMP |  |  |  |  
+remarks | TEXT |  |  |  |  
+request_reason | TEXT |  |  |  |  
+created_at | TIMESTAMP |  |  |  |  
+
+---
+
+### 🔹 `migrations` テーブル
+
+カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
+-|-|-|-|-|-
+id | BIGINT | ○ |  | ○ |  
+migration | STRING |  |  | ○ |  
+batch | INT |  |  | ○ |  
+
+---
+
+## 📊 ER図
+
+`doc/ER_diagram.png` に保存されています。  
+以下のリンクから確認できます：
+
+👉 [ER図を見る](doc/ER_diagram.png)
