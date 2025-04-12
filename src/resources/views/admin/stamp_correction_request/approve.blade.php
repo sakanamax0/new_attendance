@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>修正申請承認</title>
-    <link rel="stylesheet" href="{{ asset('css/approve.css') }}"> <!-- 外部CSSを適用 -->
+    <link rel="stylesheet" href="{{ asset('css/approve.css') }}"> 
 </head>
 <body>
   <header>
@@ -55,7 +55,7 @@
         
         <tr>
             <th>備考</th>
-            <td>{{ $detail->request_reason }}</td> <!-- request_reason カラムを表示 -->
+            <td>{{ $detail->request_reason }}</td> 
         </tr>
     </table>
 

@@ -21,10 +21,10 @@ return [
 
     'lottery' => [2, 100],
 
-    // 一般ユーザー用のクッキー設定
+  
     'cookie' => env('SESSION_COOKIE', 'laravel_session'),
 
-    // 管理者用のクッキー設定
+
     'admin_cookie' => env('ADMIN_SESSION_COOKIE', 'admin_laravel_session'),
 
     'path' => '/',

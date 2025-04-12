@@ -30,14 +30,14 @@
         <div class="container">
             <h2>{{ $user->name }}さんの勤怠</h2>
 
-            <!-- 月選択フォーム -->
+          
             <form action="{{ route('admin.attendance.staff', $user->id) }}" method="GET">
                 <label for="month"></label>
                 <input type="month" name="month" value="{{ $month ?? now()->format('Y-m') }}">
                 <button type="submit">検索</button>
             </form>
 
-            <!-- 勤怠データの表示 -->
+      
             <table class="attendance-table">
                 <thead>
                     <tr>
@@ -67,7 +67,7 @@
         </div>
     </main>
 
-    <!-- CSV出力ボタン -->
+ 
     <form action="{{ route('admin.attendance.export_csv') }}" method="GET">
         <button type="submit">CSV出力</button>
     </form>

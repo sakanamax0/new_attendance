@@ -8,7 +8,7 @@ class AttendanceUpdateRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // 必要ならユーザーの権限チェックを追加
+        return true; 
     }
 
     public function rules()

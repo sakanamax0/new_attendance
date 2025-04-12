@@ -1,4 +1,4 @@
-/* 全体のリセット */
+
 body,
 html {
     margin: 0;
@@ -8,7 +8,7 @@ html {
     color: #000;
 }
 
-/* ヘッダー部分 */
+
 .header {
     background-color: #000;
     color: #fff;
@@ -30,7 +30,7 @@ html {
     font-size: 14px;
 }
 
-/* メインコンテンツ */
+
 .main-content {
     text-align: center;
     margin: 50px auto;

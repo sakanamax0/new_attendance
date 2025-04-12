@@ -3,7 +3,7 @@
 return [
 
     'defaults' => [
-        'guard' => 'web', // 一般ユーザー用のガード
+        'guard' => 'web', 
         'passwords' => 'users',
     ],
 
@@ -11,13 +11,13 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
-            'cookie' => env('SESSION_COOKIE', 'laravel_session'), // 一般ユーザーのクッキー名
+            'cookie' => env('SESSION_COOKIE', 'laravel_session'), 
         ],
 
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
-            'cookie' => env('ADMIN_SESSION_COOKIE', 'admin_laravel_session'), // 管理者用のクッキー名
+            'cookie' => env('ADMIN_SESSION_COOKIE', 'admin_laravel_session'), 
         ],
     ],
 

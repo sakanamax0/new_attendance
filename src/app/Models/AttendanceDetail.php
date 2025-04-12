@@ -17,7 +17,7 @@ class AttendanceDetail extends Model
         'request_break_end_time',
         'request_reason',
         'request_status',
-        'remarks', // 追加
+        'remarks', 
         'is_locked',
     ];
 
@@ -28,9 +28,7 @@ class AttendanceDetail extends Model
         'request_break_end_time' => 'datetime',
     ];
 
-    /**
-     * Attendance モデルとのリレーション
-     */
+
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);

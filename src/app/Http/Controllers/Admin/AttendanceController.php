@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    // 勤怠一覧
+    
     public function index(Request $request)
     {
         $date = $request->input('date', Carbon::today()->toDateString());
@@ -28,7 +28,7 @@ class AttendanceController extends Controller
         return view('admin.attendance.admin_list', compact('attendances', 'date', 'dateFormatted'));
     }
 
-    // 勤怠承認
+    
     public function approve($id)
     {
         $attendance = Attendance::findOrFail($id);
@@ -44,7 +44,7 @@ class AttendanceController extends Controller
         return redirect()->route('admin.attendance.detail', $id)->with('success', '修正リクエストを承認しました。');
     }
 
-    // スタッフの勤怠情報を表示
+    
     public function staffAttendance($user_id)
     {
         $user = User::findOrFail($user_id);
@@ -57,7 +57,7 @@ class AttendanceController extends Controller
         return view('admin.attendance.staff', compact('user', 'attendances'));
     }
 
-    // CSV出力
+    
     public function exportCSV(Request $request)
     {
         $attendances = Attendance::with('user', 'breaktimes')
@@ -100,7 +100,7 @@ class AttendanceController extends Controller
         );
     }
 
-    // 時間計算の共通処理
+   
     private function calculateTimes(&$attendance)
     {
         $totalBreakTime = 0;
@@ -124,7 +124,7 @@ class AttendanceController extends Controller
         }
     }
 
-    // 分→HH:MM形式に変換
+   
     private function convertMinutesToTimeFormat($minutes)
     {
         $hours = floor($minutes / 60);

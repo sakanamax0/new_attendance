@@ -31,7 +31,7 @@
     <div class="container">
       <h2 class="title">管理者用 申請一覧</h2>
 
-      <!-- タブ切替 -->
+     
       <div class="tabs">
         <ul>
           <li class="tab active" data-tab="pending">承認待ち</li>

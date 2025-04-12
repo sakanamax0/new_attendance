@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\HasMany; // ✅ 追加
-use App\Models\Attendance; // ✅ 追加
+use Illuminate\Database\Eloquent\Relations\HasMany; 
+use App\Models\Attendance; 
 
 class User extends Authenticatable
 {
@@ -29,7 +29,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // ✅ 勤怠データとのリレーション
+
     public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class, 'user_id', 'id');
