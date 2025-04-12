@@ -1,10 +1,10 @@
-# 🕒 coachtech 勤怠管理アプリ
+#  coachtech 勤怠管理アプリ
 
 企業向けの勤怠打刻・修正申請・管理を行う Web アプリケーションです。
 
 ---
 
-## 🚀 環境構築
+##  環境構築
 
 ### 1. リポジトリをクローン
 
@@ -37,25 +37,37 @@ make migrate
 
 ---
 
-## 👤 ダミーデータのログイン情報
+##  使用技術
 
-### 管理者ログイン
-
-- メールアドレス：`master@yahoo.co.jp`  
-- パスワード：`master7`
-
-### 一般ユーザーログイン
-
-- メールアドレス：`ika@yahoo.co.jp`  
-- パスワード：`ikaikaaa`
+| 技術           | バージョン        |
+|----------------|-------------------|
+| Laravel        | 10.x              |
+| PHP            | 8.1（※Docker内）   |
+| MySQL          | 8.0.26            |
 
 ---
 
-## 🗂 テーブル仕様
+##  ダミーデータのログイン情報
+
+### 管理者ログイン
+
+| 種別     | メールアドレス         | パスワード   |
+|----------|--------------------------|--------------|
+| 管理者   | master@yahoo.co.jp       | master7      |
+
+### 一般ユーザーログイン
+
+| 種別       | メールアドレス       | パスワード |
+|------------|------------------------|------------|
+| 一般ユーザー | test@gmail.com        | password   |
+
+---
+
+## テーブル仕様
 
 以下はアプリケーションで使用するデータベーステーブルの構成です。
 
-### 🔹 `users` テーブル
+###  `users` テーブル
 
 カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
 -|-|-|-|-|-
@@ -69,7 +81,7 @@ attendance_status | STRING |  |  |  |
 
 ---
 
-### 🔹 `admins` テーブル
+###  `admins` テーブル
 
 カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
 -|-|-|-|-|-
@@ -82,7 +94,7 @@ updated_at | TIMESTAMP |  |  |  |
 
 ---
 
-### 🔹 `attendances` テーブル
+###  `attendances` テーブル
 
 カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
 -|-|-|-|-|-
@@ -97,7 +109,7 @@ updated_at | TIMESTAMP |  |  |  |
 
 ---
 
-### 🔹 `breaktimes` テーブル
+###  `breaktimes` テーブル
 
 カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
 -|-|-|-|-|-
@@ -110,7 +122,7 @@ updated_at | TIMESTAMP |  |  |  |
 
 ---
 
-### 🔹 `attendance_details` テーブル
+###  `attendance_details` テーブル
 
 カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
 -|-|-|-|-|-
@@ -123,7 +135,7 @@ created_at | TIMESTAMP |  |  |  |
 
 ---
 
-### 🔹 `migrations` テーブル
+###  `migrations` テーブル
 
 カラム名 | 型 | PRIMARY KEY | UNIQUE KEY | NOT NULL | FOREIGN KEY  
 -|-|-|-|-|-
@@ -133,9 +145,18 @@ batch | INT |  |  | ○ |
 
 ---
 
-## 📊 ER図
+##  ER図
 
 `doc/ER_diagram.png` に保存されています。  
 以下のリンクから確認できます：
 
-👉 [ER図を見る](doc/ER_diagram.png)
+[ER図を見る](doc/ER_diagram.png)
+
+---
+
+##  開発環境URL
+
+| サービス        | URL                          |
+|----------------|-------------------------------|
+| アプリケーション | http://localhost              |
+| phpMyAdmin     | http://localhost:8080         |
